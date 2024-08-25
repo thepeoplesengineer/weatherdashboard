@@ -1,27 +1,30 @@
 import dotenv from 'dotenv';
 import express from 'express';
+import path from 'path';
+import { fileURLToPath } from 'url';
+
 dotenv.config();
+
+// Manually define __filename and __dirname for ES module compatibility
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 // Import the routes
 import routes from './routes/index.js';
 
 const app = express();
-
 const PORT = process.env.PORT || 3001;
 
-// TODO: Serve static files of entire client dist folder
+// Serve static files from the 'client' directory
+app.use(express.static(path.join(__dirname, '..', '..', 'client')));
 
-app.use(express.static('dist'));
+// Serve index.html at the root URL
+app.get('*', (_req, res) => {
+  res.sendFile(path.join(__dirname, '..', '..', 'client', 'index.html'));
+});
 
-
-// TODO: Implement middleware for parsing JSON and urlencoded form data
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
-
-
-// TODO: Implement middleware to connect the routes
+// Implement middleware to connect the routes
 app.use('/api', routes);
-
 
 // Start the server on the port
 app.listen(PORT, () => console.log(`Listening on PORT: ${PORT}`));
