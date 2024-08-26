@@ -1,12 +1,14 @@
+import { promises as fs } from 'fs';
+import { v4 as uuidv4 } from 'uuid';
+import path from 'path';
+import { fileURLToPath } from 'url';
+
 // TODO: Define a City class with name and id properties
 class City {
   constructor(public id: string, public name: string) {}
 };
 
-import { promises as fs } from 'fs';
-import { v4 as uuidv4 } from 'uuid';
-import path from 'path';
-import { fileURLToPath } from 'url';
+
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -17,7 +19,7 @@ const __dirname = path.dirname(__filename);
 
 // TODO: Complete the HistoryService class // Define the filePath to the JSON file where the city data is stored
 class HistoryService {
-  private filePath: string;
+  private filePath = path.join(__dirname, '../../db/searchHistory.json');
 
   constructor() {
 
@@ -33,7 +35,7 @@ class HistoryService {
       return [];
     }
   };
-  // private async read() {}
+
   // TODO: Define a write method that writes the updated cities array to the searchHistory.json file
   private async write(cities: City[]): Promise<void> {
     try {
